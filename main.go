@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/techwithmat/booki-api/config"
+	"github.com/techwithmat/booki-api/data/database"
 )
 
 func main() {
@@ -12,8 +12,15 @@ func main() {
 	configuration, err := config.NewConfig()
 
 	if err != nil {
-		log.Println("Error loading configuration file", err.Error())
+		fmt.Printf("Error loading configuration file: %v", err)
 	}
 
-	fmt.Println(configuration.Database)
+	// establish DB connection
+	db, err := database.Connect(configuration.Database)
+
+	if err != nil {
+		fmt.Printf("Unable to connect to database: %v", err)
+	}
+
+	defer db.Close()
 }
