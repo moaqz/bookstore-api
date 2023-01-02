@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/techwithmat/booki-api/config"
-	"github.com/techwithmat/booki-api/data/database"
+	"github.com/techwithmat/booki-api/pkg/database"
 )
 
 func main() {

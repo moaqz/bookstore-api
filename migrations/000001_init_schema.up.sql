@@ -5,15 +5,7 @@ CREATE TABLE categories(
   description TEXT DEFAULT NULL
 );
 
--- 2. LANGUAGES
-CREATE TABLE languages (
-  id SERIAL PRIMARY KEY, 
-  name VARCHAR(40),
-  code VARCHAR(3),
-  description TEXT
-);
-
--- 3. AUTHORS
+-- 2. AUTHORS
 CREATE TABLE authors (
   id SERIAL PRIMARY KEY,
   name VARCHAR(40) NOT NULL,
@@ -24,7 +16,7 @@ CREATE TABLE authors (
   twitter_name VARCHAR(50) DEFAULT NULL
 );
 
--- 4. BOOKS
+-- 3. BOOKS
 CREATE TABLE books (
   id SERIAL PRIMARY KEY,
   title VARCHAR(40),
@@ -34,12 +26,11 @@ CREATE TABLE books (
   price NUMERIC(2),
   image TEXT,
   published_at DATE,
+  language VARCHAR(40),
 
   author_id INTEGER,
-  category_id INTEGER,
-  language_id INTEGER
+  category_id INTEGER
 );
 
 ALTER TABLE books ADD FOREIGN KEY (author_id) REFERENCES authors (id);
 ALTER TABLE books ADD FOREIGN KEY (category_id) REFERENCES categories (id);
-ALTER TABLE books ADD FOREIGN KEY (language_id) REFERENCES languages (id);
