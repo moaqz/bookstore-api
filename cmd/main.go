@@ -3,8 +3,14 @@ package main
 import (
 	"fmt"
 
+	"github.com/labstack/echo/v4"
 	"github.com/techwithmat/booki-api/config"
 	"github.com/techwithmat/booki-api/pkg/database"
+
+	// Book Imports
+	"github.com/techwithmat/booki-api/internal/books/repository"
+	"github.com/techwithmat/booki-api/internal/books/usecase"
+	"github.com/techwithmat/booki-api/internal/books/delivery"
 )
 
 func main() {
@@ -23,4 +29,14 @@ func main() {
 	}
 
 	defer db.Close()
+
+	e := echo.New()
+	router := e.Group("/api/v1")
+
+	// initialize repos, services and handlers
+	bookRepository := repository.NewBookRepository(db)
+	bookUseCase := usecase.NewBookUseCase(bookRepository)
+	delivery.NewBookHandler(router, bookUseCase)
+
+	e.Logger.Fatal(e.Start(":" + configuration.Port))
 }

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/techwithmat/booki-api/pkg/utils/env"
+	"github.com/techwithmat/booki-api/pkg/utils"
 )
 
 // Config is a struct that contains configuration variables
@@ -21,9 +21,9 @@ type Database struct {
 
 // NewConfig creates a new Config struct
 func NewConfig() (*Config, error) {
-	env.LoadEnv()
+	utils.LoadEnv()
 
-	port := env.MustGet("PORT")
+	port := utils.MustGet("PORT")
 
 	// set default PORT if missing
 	if port == "" {
@@ -33,11 +33,11 @@ func NewConfig() (*Config, error) {
 	return &Config{
 		Port: port,
 		Database: &Database{
-			Host:     env.MustGet("POSTGRES_HOST"),
-			Port:     env.MustGet("POSTGRES_PORT"),
-			User:     env.MustGet("POSTGRES_USER"),
-			DB:       env.MustGet("POSTGRES_DB"),
-			Password: env.MustGet("POSTGRES_PASSWORD"),
+			Host:     utils.MustGet("POSTGRES_HOST"),
+			Port:     utils.MustGet("POSTGRES_PORT"),
+			User:     utils.MustGet("POSTGRES_USER"),
+			DB:       utils.MustGet("POSTGRES_DB"),
+			Password: utils.MustGet("POSTGRES_PASSWORD"),
 		},
 	}, nil
 }
