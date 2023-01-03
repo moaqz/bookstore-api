@@ -6,21 +6,21 @@ import (
 
 // Book is representing the Book data struct
 type Book struct {
-	ID           int     `json:"id"`
+	ID           int64   `json:"id"`
 	Title        string  `json:"title"`
 	Subtitle     string  `json:"subtitle"`
 	AboutTheBook string  `json:"about_the_book" db:"about_the_book"`
-	PageCount    int     `json:"page_count" db:"page_count"`
+	PageCount    int64   `json:"page_count" db:"page_count"`
 	Price        float64 `json:"price"`
 	Image        string  `json:"image"`
 	Language     string  `json:"language"`
 	AuthorName   string  `json:"author_name" db:"author_name"`
 	AuthorAvatar string  `json:"author_avatar" db:"author_avatar"`
-	CategoryId   int     `json:"category_id" db:"category_id"`
+	CategoryId   int64   `json:"category_id" db:"category_id"`
 }
 
 type Books struct {
-	ID         int    `json:"id"`
+	ID         int64  `json:"id"`
 	Title      string `json:"title"`
 	Subtitle   string `json:"subtitle"`
 	Image      string `json:"image"`

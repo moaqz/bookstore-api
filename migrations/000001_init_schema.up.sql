@@ -21,4 +21,11 @@ CREATE TABLE books (
   category_id INTEGER
 );
 
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(128) NOT NULL,
+  is_staff BOOLEAN NOT NULL
+);
+
 ALTER TABLE books ADD FOREIGN KEY (category_id) REFERENCES categories (id);
