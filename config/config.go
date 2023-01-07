@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/techwithmat/booki-api/pkg/utils"
+	"github.com/techwithmat/bookery-api/pkg/utils"
 )
 
 // Config is a struct that contains configuration variables

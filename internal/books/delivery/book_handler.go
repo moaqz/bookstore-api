@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
-	"github.com/techwithmat/booki-api/internal/domain"
+	"github.com/techwithmat/bookery-api/internal/domain"
 )
 
 type BookHandler struct {

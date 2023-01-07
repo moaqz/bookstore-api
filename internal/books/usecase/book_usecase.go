@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/techwithmat/booki-api/internal/domain"
+	"github.com/techwithmat/bookery-api/internal/domain"
 )
 
 // Book UseCase
