@@ -34,7 +34,7 @@ func (u *bookUsecase) GetByCategory(ctx context.Context, category string) ([]dom
 		return nil, err
 	}
 
-	return books, err
+	return books, nil
 }
 
 func (u *bookUsecase) GetAll(ctx context.Context) ([]domain.Books, error) {
@@ -44,5 +44,5 @@ func (u *bookUsecase) GetAll(ctx context.Context) ([]domain.Books, error) {
 		return nil, err
 	}
 
-	return books, err
+	return books, nil
 }

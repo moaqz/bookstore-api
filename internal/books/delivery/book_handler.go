@@ -6,6 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/techwithmat/bookery-api/internal/domain"
+	"github.com/techwithmat/bookery-api/pkg/utils"
 )
 
 type BookHandler struct {
@@ -28,7 +29,12 @@ func (h *BookHandler) GetAllBooks(c echo.Context) error {
 	books, err := h.usecase.GetAll(ctx)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+		status, apiErr := utils.ParseErrors(err)
+		return c.JSON(status, apiErr)
+	}
+
+	if len(books) == 0 {
+		return c.NoContent(http.StatusNoContent)
 	}
 
 	return c.JSON(http.StatusOK, books)
@@ -45,7 +51,8 @@ func (h *BookHandler) GetBookById(c echo.Context) error {
 	book, err := h.usecase.GetByID(ctx, int64(id))
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+		status, apiErr := utils.ParseErrors(err)
+		return c.JSON(status, apiErr)
 	}
 
 	return c.JSON(http.StatusOK, book)
@@ -58,7 +65,12 @@ func (h *BookHandler) GetBookByCategory(c echo.Context) error {
 	books, err := h.usecase.GetByCategory(ctx, category)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+		status, apiErr := utils.ParseErrors(err)
+		return c.JSON(status, apiErr)
+	}
+
+	if len(books) == 0 {
+		return c.NoContent(http.StatusNoContent)
 	}
 
 	return c.JSON(http.StatusOK, books)
