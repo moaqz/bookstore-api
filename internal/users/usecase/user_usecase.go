@@ -40,13 +40,36 @@ func (u *userUseCase) RegisterUser(ctx context.Context, user *domain.SignUpReque
 }
 
 func (u *userUseCase) GetUserByID(ctx context.Context, id int64) (*domain.GetUserResponse, error) {
-	return &domain.GetUserResponse{}, nil
+	user, err := u.userRepo.GetUserByID(ctx, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (u *userUseCase) LoginUser(ctx context.Context, user *domain.LoginRequest) error {
-	return nil
+	validationErrors := v.ValidateStruct(user)
+
+	if validationErrors != nil {
+		return validationErrors
+	}
+
+	existingUser, err := u.userRepo.LoginUser(ctx, user)
+
+	if err != nil {
+		return err
+	}
+
+	err = hash.PasswordMatch(existingUser.Password, user.Password)
+
+	// nil means it is a match
+	return err
 }
 
-func (u *userUseCase) DeleteUser(ctx context.Context, email string) error {
-	return nil
+func (u *userUseCase) DeleteUser(ctx context.Context, id int64) error {
+	err := u.userRepo.DeleteUser(ctx, id)
+
+	return err
 }

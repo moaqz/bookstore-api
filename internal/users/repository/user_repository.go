@@ -24,13 +24,37 @@ func (r *usersRepo) RegisterUser(ctx context.Context, user *domain.SignUpRequest
 }
 
 func (r *usersRepo) GetUserByID(ctx context.Context, id int64) (*domain.GetUserResponse, error) {
-	return &domain.GetUserResponse{}, nil
+	var user domain.GetUserResponse
+
+	err := r.db.GetContext(ctx, &user, getUserById, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user.ID = id
+
+	return &user, err
 }
 
 func (r *usersRepo) LoginUser(ctx context.Context, user *domain.LoginRequest) (*domain.User, error) {
-	return &domain.User{}, nil
+	var existingUserbyEmail domain.User
+
+	err := r.db.GetContext(ctx, &existingUserbyEmail, loginUser, user.Email)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &existingUserbyEmail, nil
 }
 
-func (r *usersRepo) DeleteUser(ctx context.Context, email string) error {
+func (r *usersRepo) DeleteUser(ctx context.Context, id int64) error {
+	_, err := r.db.ExecContext(ctx, deleteUser, id)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

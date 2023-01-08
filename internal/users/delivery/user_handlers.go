@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/techwithmat/bookery-api/internal/domain"
@@ -51,13 +52,65 @@ func (h *UserHandler) RegisterUser(c echo.Context) error {
 }
 
 func (h *UserHandler) GetUserByID(c echo.Context) error {
-	return nil
+	ctx := c.Request().Context()
+	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	user, err := h.usecase.GetUserByID(ctx, int64(id))
+
+	if err != nil {
+		status, apiErr := httpErrors.ParseErrors(err)
+
+		return c.JSON(status, apiErr)
+	}
+
+	return c.JSON(http.StatusOK, user)
 }
 
 func (h *UserHandler) LoginUser(c echo.Context) error {
-	return nil
+	ctx := c.Request().Context()
+	var user domain.LoginRequest
+
+	c.Bind(&user)
+
+	err := h.usecase.LoginUser(ctx, &user)
+
+	if err != nil {
+		status, apiErr := httpErrors.ParseErrors(err)
+
+		return c.JSON(status, apiErr)
+	}
+
+	token, err := jwtToken.GenerateJWT(user.Email)
+
+	if err != nil {
+		return c.NoContent(http.StatusInternalServerError)
+	}
+
+	return c.JSON(http.StatusCreated, domain.TokenResponse{
+		Message: "Login succesful",
+		Token:   token,
+	})
 }
 
 func (u *UserHandler) DeleteUser(c echo.Context) error {
-	return nil
+	ctx := c.Request().Context()
+	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	err = u.usecase.DeleteUser(ctx, int64(id))
+
+	if err != nil {
+		status, apiErr := httpErrors.ParseErrors(err)
+
+		return c.JSON(status, apiErr)
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }

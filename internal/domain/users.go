@@ -39,7 +39,7 @@ type UserUseCase interface {
 	GetUserByID(ctx context.Context, id int64) (*GetUserResponse, error)
 	RegisterUser(ctx context.Context, user *SignUpRequest)  error
 	LoginUser(ctx context.Context, user *LoginRequest) error
-	DeleteUser(ctx context.Context, email string) error
+	DeleteUser(ctx context.Context, id int64) error
 }
 
 // UserRepository represent the User's repository contract
@@ -47,5 +47,5 @@ type UserRepository interface {
 	GetUserByID(ctx context.Context, id int64) (*GetUserResponse, error)
 	RegisterUser(ctx context.Context, user *SignUpRequest) error
 	LoginUser(ctx context.Context, user *LoginRequest) (*User, error)
-	DeleteUser(ctx context.Context, email string) error
+	DeleteUser(ctx context.Context, id int64) error
 }
