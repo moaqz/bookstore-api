@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/techwithmat/bookery-api/internal/domain"
-	"github.com/techwithmat/bookery-api/pkg/utils"
+	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
 )
 
 type BookHandler struct {
@@ -29,7 +29,7 @@ func (h *BookHandler) GetAllBooks(c echo.Context) error {
 	books, err := h.usecase.GetAll(ctx)
 
 	if err != nil {
-		status, apiErr := utils.ParseErrors(err)
+		status, apiErr := httpErrors.ParseErrors(err)
 		return c.JSON(status, apiErr)
 	}
 
@@ -51,7 +51,7 @@ func (h *BookHandler) GetBookById(c echo.Context) error {
 	book, err := h.usecase.GetByID(ctx, int64(id))
 
 	if err != nil {
-		status, apiErr := utils.ParseErrors(err)
+		status, apiErr := httpErrors.ParseErrors(err)
 		return c.JSON(status, apiErr)
 	}
 
@@ -65,7 +65,7 @@ func (h *BookHandler) GetBookByCategory(c echo.Context) error {
 	books, err := h.usecase.GetByCategory(ctx, category)
 
 	if err != nil {
-		status, apiErr := utils.ParseErrors(err)
+		status, apiErr := httpErrors.ParseErrors(err)
 		return c.JSON(status, apiErr)
 	}
 

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/techwithmat/bookery-api/pkg/utils"
+	"github.com/techwithmat/bookery-api/pkg/utils/env"
 )
 
 // Config is a struct that contains configuration variables
@@ -21,9 +21,9 @@ type Database struct {
 
 // NewConfig creates a new Config struct
 func NewConfig() (*Config, error) {
-	utils.LoadEnv()
+	env.LoadEnv()
 
-	port := utils.MustGet("PORT")
+	port := env.MustGet("PORT")
 
 	// set default PORT if missing
 	if port == "" {
@@ -33,11 +33,11 @@ func NewConfig() (*Config, error) {
 	return &Config{
 		Port: port,
 		Database: &Database{
-			Host:     utils.MustGet("POSTGRES_HOST"),
-			Port:     utils.MustGet("POSTGRES_PORT"),
-			User:     utils.MustGet("POSTGRES_USER"),
-			DB:       utils.MustGet("POSTGRES_DB"),
-			Password: utils.MustGet("POSTGRES_PASSWORD"),
+			Host:     env.MustGet("POSTGRES_HOST"),
+			Port:     env.MustGet("POSTGRES_PORT"),
+			User:     env.MustGet("POSTGRES_USER"),
+			DB:       env.MustGet("POSTGRES_DB"),
+			Password: env.MustGet("POSTGRES_PASSWORD"),
 		},
 	}, nil
 }
