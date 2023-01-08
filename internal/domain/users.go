@@ -23,8 +23,9 @@ type LoginRequest struct {
 	Password string `json:"password" form:"password" validate:"required,min=8,max=28"`
 }
 
-type LoginResponse struct {
-	Token string `json:"token"`
+type TokenResponse struct {
+	Message string `json:"message"`
+	Token   string `json:"token"`
 }
 
 type GetUserResponse struct {
@@ -36,8 +37,8 @@ type GetUserResponse struct {
 // UserUsecase represent the User's usecases
 type UserUseCase interface {
 	GetUserByID(ctx context.Context, id int64) (*GetUserResponse, error)
-	RegisterUser(ctx context.Context, user *SignUpRequest) error
-	LoginUser(ctx context.Context, user *LoginRequest) (*LoginResponse, error)
+	RegisterUser(ctx context.Context, user *SignUpRequest)  error
+	LoginUser(ctx context.Context, user *LoginRequest) error
 	DeleteUser(ctx context.Context, email string) error
 }
 
