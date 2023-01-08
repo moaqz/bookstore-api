@@ -1,6 +1,8 @@
 package domain
 
-import "context"
+import (
+	"context"
+)
 
 type User struct {
 	ID       int64  `json:"id"`
@@ -10,15 +12,15 @@ type User struct {
 }
 
 type SignUpRequest struct {
-	Email                string `json:"email"`
-	Password             string `json:"password"`
-	PasswordConfirmation string `json:"password_confirmation"`
+	Email                string `json:"email" form:"email" validate:"required,email"`
+	Password             string `json:"password" form:"password" validate:"required,eqfield=PasswordConfirmation,min=8,max=28"`
+	PasswordConfirmation string `json:"password_confirmation" form:"password_confirmation" validate:"required,min=8,max=28"`
 	HashedPassword       string `json:"hashed_password"`
 }
 
 type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" form:"email" validate:"required,email"`
+	Password string `json:"password" form:"password" validate:"required,min=8,max=28"`
 }
 
 type LoginResponse struct {
