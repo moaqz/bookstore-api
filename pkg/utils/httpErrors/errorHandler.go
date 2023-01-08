@@ -1,9 +1,11 @@
-package utils
+package httpErrors
 
 import (
 	"database/sql"
 	"errors"
 	"net/http"
+
+	v "github.com/techwithmat/bookery-api/pkg/utils/validation"
 )
 
 type ApiError struct {
@@ -19,11 +21,11 @@ func ParseErrors(err error) (int, *ApiError) {
 			Code:    http.StatusNotFound,
 			Message: "Not Found",
 		}
-	case IsValidationError(err):
+	case v.IsValidationError(err):
 		return http.StatusBadRequest, &ApiError{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Request",
-			Errors:  ValidatorErrors(err),
+			Errors:  v.ValidatorErrors(err),
 		}
 	default:
 		return http.StatusInternalServerError, &ApiError{
