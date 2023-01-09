@@ -49,23 +49,23 @@ func (u *userUseCase) GetUserByID(ctx context.Context, id int64) (*domain.GetUse
 	return user, nil
 }
 
-func (u *userUseCase) LoginUser(ctx context.Context, user *domain.LoginRequest) error {
+func (u *userUseCase) GetUser(ctx context.Context, user *domain.LoginRequest) (*domain.User, error) {
 	validationErrors := v.ValidateStruct(user)
 
 	if validationErrors != nil {
-		return validationErrors
+		return nil, validationErrors
 	}
 
-	existingUser, err := u.userRepo.LoginUser(ctx, user)
+	existingUser, err := u.userRepo.GetUser(ctx, user)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = hash.PasswordMatch(existingUser.Password, user.Password)
 
 	// nil means it is a match
-	return err
+	return existingUser, err
 }
 
 func (u *userUseCase) DeleteUser(ctx context.Context, id int64) error {

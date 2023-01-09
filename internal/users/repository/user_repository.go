@@ -37,10 +37,10 @@ func (r *usersRepo) GetUserByID(ctx context.Context, id int64) (*domain.GetUserR
 	return &user, err
 }
 
-func (r *usersRepo) LoginUser(ctx context.Context, user *domain.LoginRequest) (*domain.User, error) {
+func (r *usersRepo) GetUser(ctx context.Context, user *domain.LoginRequest) (*domain.User, error) {
 	var existingUserbyEmail domain.User
 
-	err := r.db.GetContext(ctx, &existingUserbyEmail, loginUser, user.Email)
+	err := r.db.GetContext(ctx, &existingUserbyEmail, getUser, user.Email)
 
 	if err != nil {
 		return nil, err

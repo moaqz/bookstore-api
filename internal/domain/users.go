@@ -38,7 +38,7 @@ type GetUserResponse struct {
 type UserUseCase interface {
 	GetUserByID(ctx context.Context, id int64) (*GetUserResponse, error)
 	RegisterUser(ctx context.Context, user *SignUpRequest)  error
-	LoginUser(ctx context.Context, user *LoginRequest) error
+	GetUser(ctx context.Context, user *LoginRequest) (*User, error)
 	DeleteUser(ctx context.Context, id int64) error
 }
 
@@ -46,6 +46,6 @@ type UserUseCase interface {
 type UserRepository interface {
 	GetUserByID(ctx context.Context, id int64) (*GetUserResponse, error)
 	RegisterUser(ctx context.Context, user *SignUpRequest) error
-	LoginUser(ctx context.Context, user *LoginRequest) (*User, error)
+	GetUser(ctx context.Context, user *LoginRequest) (*User, error)
 	DeleteUser(ctx context.Context, id int64) error
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/techwithmat/bookery-api/internal/domain"
+	"github.com/techwithmat/bookery-api/internal/middleware"
 	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
 	"github.com/techwithmat/bookery-api/pkg/utils/jwtToken"
 )
@@ -22,7 +23,7 @@ func NewUserHandler(router *echo.Group, usecase domain.UserUseCase) {
 	router.GET("/user/:id", handler.GetUserByID)
 	router.POST("/user/signup", handler.RegisterUser)
 	router.POST("/user/login", handler.LoginUser)
-	router.DELETE("/user/:id", handler.DeleteUser)
+	router.DELETE("/user/:id", handler.DeleteUser, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
 }
 
 func (h *UserHandler) RegisterUser(c echo.Context) error {
@@ -39,7 +40,7 @@ func (h *UserHandler) RegisterUser(c echo.Context) error {
 		return c.JSON(status, apiErr)
 	}
 
-	token, err := jwtToken.GenerateJWT(user.Email)
+	token, err := jwtToken.GenerateJWT(user.Email, false)
 
 	if err != nil {
 		return c.NoContent(http.StatusInternalServerError)
@@ -76,7 +77,7 @@ func (h *UserHandler) LoginUser(c echo.Context) error {
 
 	c.Bind(&user)
 
-	err := h.usecase.LoginUser(ctx, &user)
+	u, err := h.usecase.GetUser(ctx, &user)
 
 	if err != nil {
 		status, apiErr := httpErrors.ParseErrors(err)
@@ -84,13 +85,13 @@ func (h *UserHandler) LoginUser(c echo.Context) error {
 		return c.JSON(status, apiErr)
 	}
 
-	token, err := jwtToken.GenerateJWT(user.Email)
+	token, err := jwtToken.GenerateJWT(u.Email, u.IsStaff)
 
 	if err != nil {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
-	return c.JSON(http.StatusCreated, domain.TokenResponse{
+	return c.JSON(http.StatusOK, domain.TokenResponse{
 		Message: "Login succesful",
 		Token:   token,
 	})

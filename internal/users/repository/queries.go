@@ -18,7 +18,7 @@ const (
 		id = $1;
 	`
 
-	loginUser = `
+	getUser = `
 	SELECT 
 		id,
 		email,
