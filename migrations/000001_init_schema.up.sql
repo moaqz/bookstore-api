@@ -5,14 +5,7 @@ CREATE TABLE categories(
   description TEXT DEFAULT NULL
 );
 
--- 2. TAGS
-CREATE TABLE tags (
-  id SERIAL PRIMARY KEY, 
-  name VARCHAR(40),
-  category_id INTEGER REFERENCES categories(id)
-);
-
--- 3. BOOKS
+-- 2. BOOKS
 CREATE TABLE books (
   id SERIAL PRIMARY KEY,
   title VARCHAR(40),
@@ -28,7 +21,7 @@ CREATE TABLE books (
   category_id INTEGER REFERENCES categories(id)
 );
 
--- 4. USERS
+-- 3. USERS
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -36,7 +29,7 @@ CREATE TABLE users (
   is_staff BOOLEAN NOT NULL
 );
 
--- 5. WHISLIST
+-- 4. WHISLIST
 CREATE TABLE wishlist (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -45,7 +38,7 @@ CREATE TABLE wishlist (
   added_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. CART
+-- 5. CART
 CREATE TABLE cart (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -54,7 +47,7 @@ CREATE TABLE cart (
   added_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 7. ORDERS
+-- 6. ORDERS
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
