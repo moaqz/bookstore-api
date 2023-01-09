@@ -23,7 +23,7 @@ func NewUserHandler(router *echo.Group, usecase domain.UserUseCase) {
 	router.GET("/user/:id", handler.GetUserByID)
 	router.POST("/user/signup", handler.RegisterUser)
 	router.POST("/user/login", handler.LoginUser)
-	router.DELETE("/user/:id", handler.DeleteUser, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
+	router.DELETE("/user/unregister", handler.DeleteUser, middleware.AuthJWTMiddleware)
 }
 
 func (h *UserHandler) RegisterUser(c echo.Context) error {
@@ -99,13 +99,14 @@ func (h *UserHandler) LoginUser(c echo.Context) error {
 
 func (u *UserHandler) DeleteUser(c echo.Context) error {
 	ctx := c.Request().Context()
-	id, err := strconv.Atoi(c.Param("id"))
+	email := c.Get("email").(string)
 
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
-	}
+	var user domain.UnregisterRequest
 
-	err = u.usecase.DeleteUser(ctx, int64(id))
+	c.Bind(&user)
+	user.Email = email
+
+	err := u.usecase.DeleteUser(ctx, &user)
 
 	if err != nil {
 		status, apiErr := httpErrors.ParseErrors(err)

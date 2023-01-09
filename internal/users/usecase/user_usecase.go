@@ -56,7 +56,7 @@ func (u *userUseCase) GetUser(ctx context.Context, user *domain.LoginRequest) (*
 		return nil, validationErrors
 	}
 
-	existingUser, err := u.userRepo.GetUser(ctx, user)
+	existingUser, err := u.userRepo.GetUser(ctx, user.Email)
 
 	if err != nil {
 		return nil, err
@@ -68,8 +68,26 @@ func (u *userUseCase) GetUser(ctx context.Context, user *domain.LoginRequest) (*
 	return existingUser, err
 }
 
-func (u *userUseCase) DeleteUser(ctx context.Context, id int64) error {
-	err := u.userRepo.DeleteUser(ctx, id)
+func (u *userUseCase) DeleteUser(ctx context.Context, user *domain.UnregisterRequest) error {
+	validationErrors := v.ValidateStruct(user)
+
+	if validationErrors != nil {
+		return validationErrors
+	}
+
+	existingUser, err := u.userRepo.GetUser(ctx, user.Email)
+
+	if err != nil {
+		return err
+	}
+
+	err = hash.PasswordMatch(existingUser.Password, user.Password)
+
+	if err != nil {
+		return err
+	}
+
+	err = u.userRepo.DeleteUser(ctx, user.Email)
 
 	return err
 }
