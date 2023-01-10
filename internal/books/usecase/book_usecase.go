@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/techwithmat/bookery-api/internal/domain"
+	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
 	"github.com/techwithmat/bookery-api/pkg/utils/validation"
 )
 
@@ -28,8 +29,8 @@ func (u *bookUsecase) GetByID(ctx context.Context, id int64) (*domain.Book, erro
 	return book, nil
 }
 
-func (u *bookUsecase) GetByCategory(ctx context.Context, category string) ([]domain.Books, error) {
-	books, err := u.bookRepo.GetByCategory(ctx, category)
+func (u *bookUsecase) GetByCategory(ctx context.Context, category string, p *pagination.PaginationQuery) ([]domain.Books, error) {
+	books, err := u.bookRepo.GetByCategory(ctx, category, p)
 
 	if err != nil {
 		return nil, err
@@ -38,8 +39,8 @@ func (u *bookUsecase) GetByCategory(ctx context.Context, category string) ([]dom
 	return books, nil
 }
 
-func (u *bookUsecase) GetAll(ctx context.Context) ([]domain.Books, error) {
-	books, err := u.bookRepo.GetAll(ctx)
+func (u *bookUsecase) GetAll(ctx context.Context, p *pagination.PaginationQuery) ([]domain.Books, error) {
+	books, err := u.bookRepo.GetAll(ctx, p)
 
 	if err != nil {
 		return nil, err
@@ -60,8 +61,16 @@ func (u *bookUsecase) InsertBook(ctx context.Context, book *domain.Book) error {
 	return err
 }
 
-func (u *bookUsecase) DeleteBook(ctx context.Context, book *domain.Book) error {
-	return nil
+func (u *bookUsecase) DeleteBook(ctx context.Context, id int64) error {
+	_, err := u.bookRepo.GetByID(ctx, id)
+
+	if err != nil {
+		return err
+	}
+
+	err = u.bookRepo.DeleteBook(ctx, id)
+
+	return err
 }
 
 func (u *bookUsecase) UpdateBook(ctx context.Context, book *domain.Book) error {

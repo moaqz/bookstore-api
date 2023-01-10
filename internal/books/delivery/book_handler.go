@@ -8,6 +8,7 @@ import (
 	"github.com/techwithmat/bookery-api/internal/domain"
 	"github.com/techwithmat/bookery-api/internal/middleware"
 	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
+	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
 )
 
 type BookHandler struct {
@@ -23,14 +24,18 @@ func NewBookHandler(router *echo.Group, usecase domain.BookUseCase) {
 	router.GET("/books/:id", handler.GetBookById)
 	router.GET("/books/category/:category", handler.GetBookByCategory)
 	router.POST("/books", handler.CreateBook, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
-	router.DELETE("/books/:id", handler.GetBookByCategory, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
-	router.PATCH("/books/:id", handler.GetBookByCategory, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
+	router.DELETE("/books/:id", handler.DeleteBook, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
 }
 
 func (h *BookHandler) GetAllBooks(c echo.Context) error {
 	ctx := c.Request().Context()
+	params, err := pagination.GetPagination(c)
 
-	books, err := h.usecase.GetAll(ctx)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "An internal error occurred")
+	}
+
+	books, err := h.usecase.GetAll(ctx, params)
 
 	if err != nil {
 		status, apiErr := httpErrors.ParseErrors(err)
@@ -66,7 +71,13 @@ func (h *BookHandler) GetBookByCategory(c echo.Context) error {
 	ctx := c.Request().Context()
 	category := c.Param("category")
 
-	books, err := h.usecase.GetByCategory(ctx, category)
+	params, err := pagination.GetPagination(c)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "An internal error occurred")
+	}
+
+	books, err := h.usecase.GetByCategory(ctx, category, params)
 
 	if err != nil {
 		status, apiErr := httpErrors.ParseErrors(err)
@@ -94,4 +105,22 @@ func (h *BookHandler) CreateBook(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, "Product created")
+}
+
+func (h *BookHandler) DeleteBook(c echo.Context) error {
+	ctx := c.Request().Context()
+	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "An internal error occurred")
+	}
+
+	err = h.usecase.DeleteBook(ctx, int64(id))
+
+	if err != nil {
+		status, apiErr := httpErrors.ParseErrors(err)
+		return c.JSON(status, apiErr)
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }

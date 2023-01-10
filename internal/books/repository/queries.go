@@ -30,14 +30,17 @@ const (
 	FROM
     books b
     INNER JOIN categories c ON b.category_id = c.id
-	WHERE c.name = $1;
+	WHERE 
+		c.name = $1
+	LIMIT $2 OFFSET $3;
 	`
 
 	getBooksQuery = `
 	SELECT
     id, title, subtitle, image, author_name
 	FROM
-    books b;
+    books b
+	LIMIT $1 OFFSET $2;
 	`
 
 	InsertBookQuery = `
@@ -46,5 +49,12 @@ const (
 		(title, subtitle, about_the_book, page_count, price, image, language, author_name, author_avatar, category_id)
 	VALUES
 		($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+	`
+
+	DeleteBookQuery = `
+	DELETE FROM
+		books
+	WHERE
+		id = $1;
 	`
 )

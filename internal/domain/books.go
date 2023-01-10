@@ -2,6 +2,8 @@ package domain
 
 import (
 	"context"
+
+	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
 )
 
 // Book is representing the Book data struct
@@ -30,19 +32,17 @@ type Books struct {
 // BookUsecase represent the Book's usecases
 type BookUseCase interface {
 	GetByID(ctx context.Context, id int64) (*Book, error)
-	GetByCategory(ctx context.Context, category string) ([]Books, error)
-	GetAll(ctx context.Context) ([]Books, error)
+	GetByCategory(ctx context.Context, category string, p *pagination.PaginationQuery) ([]Books, error)
+	GetAll(ctx context.Context, p *pagination.PaginationQuery) ([]Books, error)
 	InsertBook(ctx context.Context, book *Book) error
-	DeleteBook(ctx context.Context, book *Book) error
-	UpdateBook(ctx context.Context, book *Book) error
+	DeleteBook(ctx context.Context, id int64) error
 }
 
 // BookRepository represent the Book's repository contract
 type BookRepository interface {
 	GetByID(ctx context.Context, id int64) (*Book, error)
-	GetAll(ctx context.Context) ([]Books, error)
-	GetByCategory(ctx context.Context, category string) ([]Books, error)
+	GetAll(ctx context.Context, p *pagination.PaginationQuery) ([]Books, error)
+	GetByCategory(ctx context.Context, category string, p *pagination.PaginationQuery) ([]Books, error)
 	InsertBook(ctx context.Context, book *Book) error
 	DeleteBook(ctx context.Context, id int64) error
-	UpdateBook(ctx context.Context, id int64) error
 }
