@@ -1,7 +1,7 @@
 package repository
 
 const (
-	getBookById = `
+	getBookByIdQuery = `
 	SELECT
     id,
     title,
@@ -20,7 +20,7 @@ const (
     id = $1;
 	`
 
-	getBookByCategory = `
+	getBookByCategoryQuery = `
 	SELECT
     b.id,
     b.title,
@@ -33,10 +33,18 @@ const (
 	WHERE c.name = $1;
 	`
 
-	getBooks = `
+	getBooksQuery = `
 	SELECT
     id, title, subtitle, image, author_name
 	FROM
     books b;
+	`
+
+	InsertBookQuery = `
+	INSERT INTO 
+		books
+		(title, subtitle, about_the_book, page_count, price, image, language, author_name, author_avatar, category_id)
+	VALUES
+		($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 	`
 )

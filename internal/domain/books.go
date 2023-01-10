@@ -7,16 +7,16 @@ import (
 // Book is representing the Book data struct
 type Book struct {
 	ID           int64   `json:"id"`
-	Title        string  `json:"title"`
-	Subtitle     string  `json:"subtitle"`
-	AboutTheBook string  `json:"about_the_book" db:"about_the_book"`
-	PageCount    int64   `json:"page_count" db:"page_count"`
-	Price        float64 `json:"price"`
-	Image        string  `json:"image"`
-	Language     string  `json:"language"`
-	AuthorName   string  `json:"author_name" db:"author_name"`
-	AuthorAvatar string  `json:"author_avatar" db:"author_avatar"`
-	CategoryId   int64   `json:"category_id" db:"category_id"`
+	Title        string  `json:"title" validate:"required"`
+	Subtitle     string  `json:"subtitle" validate:"required"`
+	AboutTheBook string  `json:"about_the_book" db:"about_the_book" validate:"required"`
+	PageCount    int64   `json:"page_count" db:"page_count" validate:"required"`
+	Price        float64 `json:"price" validate:"required"`
+	Image        string  `json:"image" validate:"required,url"`
+	Language     string  `json:"language" validate:"required"`
+	AuthorName   string  `json:"author_name" db:"author_name" validate:"required"`
+	AuthorAvatar string  `json:"author_avatar" db:"author_avatar" validate:"required,url"`
+	CategoryId   int64   `json:"category_id" db:"category_id" validate:"required"`
 }
 
 type Books struct {
@@ -32,6 +32,9 @@ type BookUseCase interface {
 	GetByID(ctx context.Context, id int64) (*Book, error)
 	GetByCategory(ctx context.Context, category string) ([]Books, error)
 	GetAll(ctx context.Context) ([]Books, error)
+	InsertBook(ctx context.Context, book *Book) error
+	DeleteBook(ctx context.Context, book *Book) error
+	UpdateBook(ctx context.Context, book *Book) error
 }
 
 // BookRepository represent the Book's repository contract
@@ -39,4 +42,7 @@ type BookRepository interface {
 	GetByID(ctx context.Context, id int64) (*Book, error)
 	GetAll(ctx context.Context) ([]Books, error)
 	GetByCategory(ctx context.Context, category string) ([]Books, error)
+	InsertBook(ctx context.Context, book *Book) error
+	DeleteBook(ctx context.Context, id int64) error
+	UpdateBook(ctx context.Context, id int64) error
 }

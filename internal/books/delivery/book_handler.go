@@ -6,6 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/techwithmat/bookery-api/internal/domain"
+	"github.com/techwithmat/bookery-api/internal/middleware"
 	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
 )
 
@@ -21,6 +22,9 @@ func NewBookHandler(router *echo.Group, usecase domain.BookUseCase) {
 	router.GET("/books", handler.GetAllBooks)
 	router.GET("/books/:id", handler.GetBookById)
 	router.GET("/books/category/:category", handler.GetBookByCategory)
+	router.POST("/books", handler.CreateBook, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
+	router.DELETE("/books/:id", handler.GetBookByCategory, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
+	router.PATCH("/books/:id", handler.GetBookByCategory, middleware.AuthJWTMiddleware, middleware.AdminMiddleware)
 }
 
 func (h *BookHandler) GetAllBooks(c echo.Context) error {
@@ -74,4 +78,20 @@ func (h *BookHandler) GetBookByCategory(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, books)
+}
+
+func (h *BookHandler) CreateBook(c echo.Context) error {
+	ctx := c.Request().Context()
+	var book domain.Book
+
+	c.Bind(&book)
+
+	err := h.usecase.InsertBook(ctx, &book)
+
+	if err != nil {
+		status, apiErr := httpErrors.ParseErrors(err)
+		return c.JSON(status, apiErr)
+	}
+
+	return c.JSON(http.StatusCreated, "Product created")
 }

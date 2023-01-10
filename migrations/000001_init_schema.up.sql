@@ -12,7 +12,7 @@ CREATE TABLE books (
   subtitle TEXT,
   about_the_book TEXT,
   page_count INTEGER,
-  price NUMERIC(2),
+  price NUMERIC,
   image TEXT,
   language VARCHAR(40),
   author_name VARCHAR(40),
