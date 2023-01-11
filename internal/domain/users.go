@@ -15,7 +15,7 @@ type SignUpRequest struct {
 	Email                string `json:"email" form:"email" validate:"required,email"`
 	Password             string `json:"password" form:"password" validate:"required,eqfield=PasswordConfirmation,min=8,max=28"`
 	PasswordConfirmation string `json:"password_confirmation" form:"password_confirmation" validate:"required,min=8,max=28"`
-	HashedPassword       string `json:"hashed_password"`
+	HashedPassword       string `json:"hashed_password" swaggerignore:"true"`
 }
 
 type LoginRequest struct {

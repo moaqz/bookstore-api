@@ -17,8 +17,22 @@ import (
 	userDelivery "github.com/techwithmat/bookery-api/internal/users/delivery"
 	userRepository "github.com/techwithmat/bookery-api/internal/users/repository"
 	userUseCase "github.com/techwithmat/bookery-api/internal/users/usecase"
+
+	// Swagger
+	"github.com/swaggo/echo-swagger"
+	_ "github.com/techwithmat/bookery-api/docs"
 )
 
+//	@title			Book Store API
+//	@version		1.0
+//	@description	This API returns information about books.
+//	@termsOfService	http://swagger.io/terms/
+
+//	@license.name	MIT
+//	@license.url	https://mit-license.org/
+
+// @host		localhost:3009
+// @BasePath	/api/v1
 func main() {
 	// get configuration stucts
 	configuration, err := config.NewConfig()
@@ -48,6 +62,9 @@ func main() {
 	userRepository := userRepository.NewUsersRepo(db)
 	userUseCase := userUseCase.NewUserUseCase(userRepository)
 	userDelivery.NewUserHandler(router, userUseCase)
+
+	// Swagger docs
+	router.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	e.Logger.Fatal(e.Start(":" + configuration.Port))
 }
