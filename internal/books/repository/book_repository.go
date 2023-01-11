@@ -54,8 +54,10 @@ func (r *BooksRepo) GetByID(ctx context.Context, id int64) (*domain.Book, error)
 	return &book, nil
 }
 
-func (r *BooksRepo) InsertBook(ctx context.Context, book *domain.Book) error {
-	_, err := r.db.ExecContext(ctx, InsertBookQuery,
+func (r *BooksRepo) InsertBook(ctx context.Context, book *domain.Book) (int64, error) {
+	var id int64
+
+	err := r.db.QueryRowContext(ctx, InsertBookQuery,
 		book.Title,
 		book.Subtitle,
 		book.AboutTheBook,
@@ -66,9 +68,9 @@ func (r *BooksRepo) InsertBook(ctx context.Context, book *domain.Book) error {
 		book.AuthorName,
 		book.AuthorAvatar,
 		book.CategoryId,
-	)
+	).Scan(&id)
 
-	return err
+	return id, err
 }
 
 func (r *BooksRepo) DeleteBook(ctx context.Context, id int64) error {

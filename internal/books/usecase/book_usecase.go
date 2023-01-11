@@ -49,16 +49,16 @@ func (u *bookUsecase) GetAll(ctx context.Context, p *pagination.PaginationQuery)
 	return books, nil
 }
 
-func (u *bookUsecase) InsertBook(ctx context.Context, book *domain.Book) error {
+func (u *bookUsecase) InsertBook(ctx context.Context, book *domain.Book) (int64, error) {
 	validationErrors := validation.ValidateStruct(book)
 
 	if validationErrors != nil {
-		return validationErrors
+		return 0, validationErrors
 	}
 
-	err := u.bookRepo.InsertBook(ctx, book)
+	id, err := u.bookRepo.InsertBook(ctx, book)
 
-	return err
+	return id, err
 }
 
 func (u *bookUsecase) DeleteBook(ctx context.Context, id int64) error {

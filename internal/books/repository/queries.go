@@ -49,6 +49,7 @@ const (
 		(title, subtitle, about_the_book, page_count, price, image, language, author_name, author_avatar, category_id)
 	VALUES
 		($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+	RETURNING id;
 	`
 
 	DeleteBookQuery = `

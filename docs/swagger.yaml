@@ -1,5 +1,52 @@
 basePath: /api/v1
 definitions:
+  domain.Book:
+    properties:
+      about_the_book:
+        type: string
+      author_avatar:
+        type: string
+      author_name:
+        type: string
+      category_id:
+        type: integer
+      image:
+        type: string
+      language:
+        type: string
+      page_count:
+        type: integer
+      price:
+        type: number
+      subtitle:
+        type: string
+      title:
+        type: string
+    required:
+    - about_the_book
+    - author_avatar
+    - author_name
+    - category_id
+    - image
+    - language
+    - page_count
+    - price
+    - subtitle
+    - title
+    type: object
+  domain.Books:
+    properties:
+      author_name:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      subtitle:
+        type: string
+      title:
+        type: string
+    type: object
   domain.GetUserResponse:
     properties:
       email:
@@ -45,6 +92,16 @@ definitions:
       token:
         type: string
     type: object
+  httpErrors.EmptyBody:
+    type: object
+  httpErrors.RestError:
+    properties:
+      causes: {}
+      error:
+        type: string
+      status:
+        type: integer
+    type: object
 host: localhost:3009
 info:
   contact: {}
@@ -56,6 +113,185 @@ info:
   title: Book Store API
   version: "1.0"
 paths:
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of books. Use page and size GET arguments to regulate
+        the number of objects returned and the page, respectively.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Size number
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Books'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpErrors.EmptyBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+      summary: Get a list of books
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Create a book object.
+      parameters:
+      - description: New Book data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Book'
+      - description: With the bearer started. Only staff members
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+      summary: Create a new book
+      tags:
+      - books
+  /books/{book_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a book object.
+      parameters:
+      - description: Book ID
+        in: path
+        name: book_id
+        required: true
+        type: integer
+      - description: With the bearer started. Only staff members
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+      summary: Delete a book
+      tags:
+      - books
+    get:
+      consumes:
+      - application/json
+      description: Get a specific book object. Id parameter must be an integer.
+      parameters:
+      - description: Book ID
+        in: path
+        name: book_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+      summary: Get a book by its id
+      tags:
+      - books
+  /books/category/{category_name}:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of books by category. Use page and size GET arguments
+        to regulate the number of objects returned and the page, respectively.
+      parameters:
+      - description: Category name
+        in: path
+        name: category_name
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Size number
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Books'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpErrors.EmptyBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+      summary: Get a list of books by category
+      tags:
+      - books
   /user/{user_id}:
     delete:
       consumes:
