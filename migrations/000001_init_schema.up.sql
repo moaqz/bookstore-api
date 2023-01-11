@@ -1,8 +1,7 @@
 -- 1. CATEGORIES
 CREATE TABLE categories(
   id SERIAL PRIMARY KEY, 
-  name VARCHAR(40),
-  description TEXT DEFAULT NULL
+  name VARCHAR(40)
 );
 
 -- 2. BOOKS
