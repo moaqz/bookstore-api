@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -24,7 +23,6 @@ func (e RestError) Causes() interface{} {
 }
 
 func NewRestError(status int, err string, causes interface{}) RestErr {
-	log.Println("Causa", causes)
 	return RestError{
 		ErrStatus: status,
 		ErrError:  err,
