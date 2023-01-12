@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
 	"github.com/techwithmat/bookery-api/pkg/utils/jwtToken"
 )
 
@@ -14,7 +15,7 @@ func AuthJWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		AuthHeader := c.Request().Header.Get("Authorization")
 
 		if !strings.HasPrefix(AuthHeader, "Bearer") {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Not Authorized")
+			return echo.NewHTTPError(http.StatusBadRequest, httpErrors.NewBadRequestError("Authorization header must be in the format of Bearer [token]"))
 		}
 
 		tokenString := strings.TrimPrefix(AuthHeader, "Bearer ")
@@ -23,7 +24,7 @@ func AuthJWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		claims, err := jwtToken.GetClaimsFromToken(tokenString)
 
 		if err != nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Not Authorized")
+			return echo.NewHTTPError(http.StatusUnauthorized, httpErrors.NewUnauthorizedError("Invalid token or token has expired"))
 		}
 
 		// set claims to the context

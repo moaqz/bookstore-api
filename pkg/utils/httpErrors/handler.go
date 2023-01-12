@@ -31,6 +31,30 @@ func NewRestError(status int, err string, causes interface{}) RestErr {
 	}
 }
 
+func NewUnauthorizedError(causes interface{}) RestErr {
+	return RestError{
+		ErrStatus: http.StatusUnauthorized,
+		ErrError:  ErrUnauthorized.Error(),
+		ErrCauses: causes,
+	}
+}
+
+func NewForbiddenError(causes interface{}) RestErr {
+	return RestError{
+		ErrStatus: http.StatusForbidden,
+		ErrError:  ErrForbidden.Error(),
+		ErrCauses: causes,
+	}
+}
+
+func NewBadRequestError(causes interface{}) RestErr {
+	return RestError{
+		ErrStatus: http.StatusBadRequest,
+		ErrError:  ErrBadRequest.Error(),
+		ErrCauses: causes,
+	}
+}
+
 func Parse(err error) RestErr {
 	switch {
 	case errors.Is(err, sql.ErrNoRows):
