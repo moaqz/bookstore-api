@@ -7,7 +7,7 @@ import (
 )
 
 type Category struct {
-	ID   int64  `json:"id"`
+	ID   int64  `json:"id" swaggerignore:"true"`
 	Name string `json:"name" validate:"required"`
 }
 

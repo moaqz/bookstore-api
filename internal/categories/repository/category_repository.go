@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/techwithmat/bookery-api/internal/domain"
@@ -61,7 +62,20 @@ func (r *CategoryRepo) DeleteCategory(ctx context.Context, id int64) error {
 }
 
 func (r *CategoryRepo) UpdateCategory(ctx context.Context, c *domain.Category) error {
-	_, err := r.db.NamedExecContext(ctx, updateCategoryQuery, c)
+	res, err := r.db.NamedExecContext(ctx, updateCategoryQuery, c)
+
+	if err != nil {
+		return err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		panic(err)
+	}
+
+	if count != 1 {
+		return sql.ErrNoRows
+	}
 
 	return err
 }

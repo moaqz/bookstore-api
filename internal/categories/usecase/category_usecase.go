@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"log"
 
 	"github.com/techwithmat/bookery-api/internal/domain"
 	p "github.com/techwithmat/bookery-api/pkg/utils/pagination"
@@ -42,10 +43,10 @@ func (u *categoryUseCase) InsertCategory(ctx context.Context, c *domain.Category
 	validationErrors := validation.ValidateStruct(c)
 
 	if validationErrors != nil {
-		return 0, nil
+		return 0, validationErrors
 	}
 
-	id, err := u.InsertCategory(ctx, c)
+	id, err := u.categoryRepo.InsertCategory(ctx, c)
 
 	return id, err
 }
@@ -57,6 +58,7 @@ func (u *categoryUseCase) DeleteCategory(ctx context.Context, id int64) error {
 }
 
 func (u *categoryUseCase) UpdateCategory(ctx context.Context, c *domain.Category) error {
+	log.Println(c)
 	validationErrors := validation.ValidateStruct(c)
 
 	if validationErrors != nil {

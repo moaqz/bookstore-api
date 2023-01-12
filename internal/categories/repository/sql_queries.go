@@ -17,16 +17,16 @@ const (
 	FROM
 		categories
 	WHERE 
-		id = $1
-	RETURNING 
-		id;
+		id = $1;
 	`
 
 	insertCategoryQuery = `
 	INSERT INTO
 		categories (name)
 	VALUES 
-		($1);
+		($1)
+	RETURNING 
+		id;
 	`
 
 	deleteCategoryQuery = `

@@ -18,6 +18,11 @@ import (
 	userRepository "github.com/techwithmat/bookery-api/internal/users/repository"
 	userUseCase "github.com/techwithmat/bookery-api/internal/users/usecase"
 
+	// Category Imports
+	categoryDelivery "github.com/techwithmat/bookery-api/internal/categories/delivery"
+	categoryRepository "github.com/techwithmat/bookery-api/internal/categories/repository"
+	categoryUseCase "github.com/techwithmat/bookery-api/internal/categories/usecase"
+
 	// Swagger
 	"github.com/swaggo/echo-swagger"
 	_ "github.com/techwithmat/bookery-api/docs"
@@ -52,6 +57,7 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 	router := e.Group("/api/v1")
 
 	// initialize repos, services and handlers
@@ -62,6 +68,10 @@ func main() {
 	userRepository := userRepository.NewUsersRepo(db)
 	userUseCase := userUseCase.NewUserUseCase(userRepository)
 	userDelivery.NewUserHandler(router, userUseCase)
+
+	categoryRepository := categoryRepository.NewCategoryRepository(db)
+	categoryUseCase := categoryUseCase.NewCategoryUseCase(categoryRepository)
+	categoryDelivery.NewBookHandler(router, categoryUseCase)
 
 	// Swagger docs
 	router.GET("/swagger/*", echoSwagger.WrapHandler)
