@@ -8,6 +8,9 @@ var (
 	ErrBadQueryParams      = errors.New("Invalid query params")
 	ErrInternalServerError = errors.New("Internal Server Error")
 	ErrValidation          = errors.New("Validation Failed")
+	ErrConflict            = errors.New("A Conflict ocurred")
+	Unauthorized           = errors.New("Unauthorized")
+	Forbidden              = errors.New("Forbidden")
 )
 
 type RestErr interface {

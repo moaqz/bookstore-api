@@ -56,7 +56,21 @@ func (r *CategoryRepo) InsertCategory(ctx context.Context, c *domain.Category) (
 }
 
 func (r *CategoryRepo) DeleteCategory(ctx context.Context, id int64) error {
-	_, err := r.db.ExecContext(ctx, deleteCategoryQuery, id)
+	res, err := r.db.ExecContext(ctx, deleteCategoryQuery, id)
+
+	if err != nil {
+		return err
+	}
+
+	count, err := res.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if count != 1 {
+		return sql.ErrNoRows
+	}
 
 	return err
 }
@@ -69,8 +83,9 @@ func (r *CategoryRepo) UpdateCategory(ctx context.Context, c *domain.Category) e
 	}
 
 	count, err := res.RowsAffected()
+	
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	if count != 1 {

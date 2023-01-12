@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	v "github.com/techwithmat/bookery-api/pkg/utils/validation"
 )
@@ -38,6 +39,8 @@ func Parse(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, ErrBadQueryParams.Error(), nil)
 	case v.IsValidationError(err):
 		return NewRestError(http.StatusBadRequest, ErrValidation.Error(), v.ValidatorErrors(err))
+	case strings.Contains(err.Error(), "foreign key constraint"):
+		return NewRestError(http.StatusConflict, ErrConflict.Error(), err.Error())
 	default:
 		return NewRestError(http.StatusInternalServerError, ErrInternalServerError.Error(), nil)
 	}

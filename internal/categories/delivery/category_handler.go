@@ -140,6 +140,7 @@ func (h *CategoryHandler) UpdateCategory(c echo.Context) error {
 // @Param			Authorization	header	string	true	"With the bearer started. Only staff members"
 // @Success		204
 // @Failure		404	{object}	httpErrors.RestError
+// @Failure   409 {object}  httpErrors.RestError
 // @Failure		500	{object}	httpErrors.RestError
 // @Router			/categories/{category_id} [delete]
 func (h *CategoryHandler) DeleteCategory(c echo.Context) error {
