@@ -487,6 +487,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/httpErrors.RestError"
                         }
                     },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {

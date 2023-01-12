@@ -36,8 +36,8 @@ import (
 //	@license.name	MIT
 //	@license.url	https://mit-license.org/
 
-// @host		localhost:3009
-// @BasePath	/api/v1
+//	@host		localhost:3009
+//	@BasePath	/api/v1
 func main() {
 	// get configuration stucts
 	configuration, err := config.NewConfig()

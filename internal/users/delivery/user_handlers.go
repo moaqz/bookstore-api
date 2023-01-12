@@ -10,14 +10,14 @@ import (
 	"github.com/techwithmat/bookery-api/pkg/utils/jwtToken"
 )
 
-// @Summary      Register a new user
-// @Description  Register a user using email, username, password and password confirmation
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param request body domain.SignUpRequest true "Login data: email, password and password confirmation"
-// @Success      201  {object}  domain.TokenResponse
-// @Router       /user/signup [post]
+//	@Summary		Register a new user
+//	@Description	Register a user using email, username, password and password confirmation
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		domain.SignUpRequest	true	"Login data: email, password and password confirmation"
+//	@Success		201		{object}	domain.TokenResponse
+//	@Router			/user/signup [post]
 func (h *UserHandler) RegisterUser(c echo.Context) error {
 	ctx := c.Request().Context()
 	var user domain.SignUpRequest
@@ -44,14 +44,14 @@ func (h *UserHandler) RegisterUser(c echo.Context) error {
 	})
 }
 
-// @Summary      Get an user account data
-// @Description  Get id, username, email, first name, last name and bio from a user
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param user_id path string true "User ID"
-// @Success      200  {object}  domain.GetUserResponse
-// @Router       /user/{user_id} [get]
+//	@Summary		Get an user account data
+//	@Description	Get id, username, email, first name, last name and bio from a user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	path		string	true	"User ID"
+//	@Success		200		{object}	domain.GetUserResponse
+//	@Router			/user/{user_id} [get]
 func (h *UserHandler) GetUserByID(c echo.Context) error {
 	ctx := c.Request().Context()
 	id, err := strconv.Atoi(c.Param("id"))
@@ -71,14 +71,14 @@ func (h *UserHandler) GetUserByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-// @Summary      Login a user
-// @Description  Login a user using email and password receive a JWT as a response from a successful login
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param request body domain.LoginRequest true "Login data: email and password"
-// @Success      200  {object}  domain.TokenResponse
-// @Router       /user/login [post]
+//	@Summary		Login a user
+//	@Description	Login a user using email and password receive a JWT as a response from a successful login
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		domain.LoginRequest	true	"Login data: email and password"
+//	@Success		200		{object}	domain.TokenResponse
+//	@Router			/user/login [post]
 func (h *UserHandler) LoginUser(c echo.Context) error {
 	ctx := c.Request().Context()
 	var user domain.LoginRequest
@@ -105,15 +105,15 @@ func (h *UserHandler) LoginUser(c echo.Context) error {
 	})
 }
 
-// @Summary      Delete current user
-// @Description  Delete the current user account
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param user_id path string true "User ID"
-// @Param Authorization header string true "With the bearer started."
-// @Success      204
-// @Router       /user/{user_id} [delete]
+//	@Summary		Delete current user
+//	@Description	Delete the current user account
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id			path	string	true	"User ID"
+//	@Param			Authorization	header	string	true	"With the bearer started."
+//	@Success		204
+//	@Router			/user/{user_id} [delete]
 func (u *UserHandler) DeleteUser(c echo.Context) error {
 	ctx := c.Request().Context()
 	email := c.Get("email").(string)
