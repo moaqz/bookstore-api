@@ -29,7 +29,7 @@ func AuthJWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// set claims to the context
 		c.Set("admin", claims["is_staff"])
-		c.Set("id", claims["id"])
+		c.Set("id", int64(claims["id"].(float64)))
 
 		// Call the next handler
 		return next(c)
