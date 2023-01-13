@@ -5,7 +5,7 @@ import (
 
 	"github.com/techwithmat/bookery-api/internal/domain"
 	"github.com/techwithmat/bookery-api/pkg/utils/hash"
-	v "github.com/techwithmat/bookery-api/pkg/utils/validation"
+	"github.com/techwithmat/bookery-api/pkg/utils/jwtToken"
 )
 
 type userUseCase struct {
@@ -18,25 +18,32 @@ func NewUserUseCase(userRepo domain.UserRepository) domain.UserUseCase {
 	}
 }
 
-func (u *userUseCase) RegisterUser(ctx context.Context, user *domain.SignUpRequest) error {
-	validationErrors := v.ValidateStruct(user)
-
-	if validationErrors != nil {
-		return validationErrors
-	}
-
+func (u *userUseCase) RegisterUser(ctx context.Context, user *domain.SignUpRequest) (*domain.TokenResponse, error) {
 	hashedPassword, err := hash.HashPassword(user.Password)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// change the password for the hashed password
 	user.Password = hashedPassword
 
-	err = u.userRepo.Insert(ctx, user)
+	// Insert the user to the database 
+	id, err := u.userRepo.Insert(ctx, user)
+	if err != nil {
+		return nil, err
+	}
 
-	return err
+	token, err := jwtToken.GenerateJWT(id, false)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.TokenResponse{
+		Message: "User created",
+		Token:   token,
+	}, nil
 }
 
 func (u *userUseCase) GetUserByID(ctx context.Context, id int64) (*domain.GetUserResponse, error) {
@@ -49,45 +56,37 @@ func (u *userUseCase) GetUserByID(ctx context.Context, id int64) (*domain.GetUse
 	return user, nil
 }
 
-func (u *userUseCase) GetUser(ctx context.Context, user *domain.LoginRequest) (*domain.User, error) {
-	validationErrors := v.ValidateStruct(user)
-
-	if validationErrors != nil {
-		return nil, validationErrors
-	}
-
+func (u *userUseCase) LoginUser(ctx context.Context, user *domain.LoginRequest) (*domain.TokenResponse, error) {
 	existingUser, err := u.userRepo.FindByEmail(ctx, user.Email)
 
 	if err != nil {
 		return nil, err
 	}
 
+	// err equal to nil means it is a match
 	err = hash.PasswordMatch(existingUser.Password, user.Password)
 
-	// nil means it is a match
-	return existingUser, err
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := jwtToken.GenerateJWT(existingUser.ID, existingUser.IsStaff)
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.TokenResponse{
+		Message: "Login succesful",
+		Token:   token,
+	}, nil
 }
 
-func (u *userUseCase) DeleteUser(ctx context.Context, user *domain.UnregisterRequest) error {
-	validationErrors := v.ValidateStruct(user)
-
-	if validationErrors != nil {
-		return validationErrors
-	}
-
-	existingUser, err := u.userRepo.FindByEmail(ctx, user.Email)
+func (u *userUseCase) DeleteUser(ctx context.Context, id int64) error {
+	err := u.userRepo.Delete(ctx, id)
 
 	if err != nil {
 		return err
 	}
 
-	err = hash.PasswordMatch(existingUser.Password, user.Password)
-
-	if err != nil {
-		return err
-	}
-
-	err = u.userRepo.Delete(ctx, user.Email)
-
-	return err
+	return nil
 }

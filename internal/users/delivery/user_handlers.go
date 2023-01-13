@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/techwithmat/bookery-api/internal/domain"
 	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
-	"github.com/techwithmat/bookery-api/pkg/utils/jwtToken"
+	v "github.com/techwithmat/bookery-api/pkg/utils/validation"
 )
 
 //	@Summary		Register a new user
@@ -17,55 +17,54 @@ import (
 //	@Produce		json
 //	@Param			request	body		domain.SignUpRequest	true	"Login data: email, password and password confirmation"
 //	@Success		201		{object}	domain.TokenResponse
-//	@Router			/user/signup [post]
+//  @Failure		400   {object}  domain.RestError
+//  @Failure		409   {object}  domain.RestError
+//  @Failure		500   {object}  domain.RestError
+//	@Router			/users/signup [post]
 func (h *UserHandler) RegisterUser(c echo.Context) error {
 	ctx := c.Request().Context()
 	var user domain.SignUpRequest
 
 	c.Bind(&user)
 
-	err := h.usecase.RegisterUser(ctx, &user)
-
+	// Validate body request
+	err := v.ValidateStruct(user)
 	if err != nil {
-		status, apiErr := httpErrors.ParseErrors(err)
-
-		return c.JSON(status, apiErr)
+		return c.JSON(httpErrors.ErrorResponse(err))
 	}
 
-	token, err := jwtToken.GenerateJWT(user.Email, false)
+	registerUser, err := h.usecase.RegisterUser(ctx, &user)
 
 	if err != nil {
-		return c.NoContent(http.StatusInternalServerError)
+		return c.JSON(httpErrors.ErrorResponse(err))
 	}
 
-	return c.JSON(http.StatusCreated, domain.TokenResponse{
-		Message: "User created",
-		Token:   token,
-	})
+	return c.JSON(http.StatusCreated, registerUser)
 }
 
 //	@Summary		Get an user account data
-//	@Description	Get id, username, email, first name, last name and bio from a user
+//	@Description	Get id, email and role from a user
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Param			user_id	path		string	true	"User ID"
+//	@Param			user_id	path		int	true	"User ID"
 //	@Success		200		{object}	domain.GetUserResponse
-//	@Router			/user/{user_id} [get]
+//  @Failure		400   {object}  domain.RestError
+//  @Failure		404   {object}  domain.RestError
+//  @Failure		500   {object}  domain.RestError
+//	@Router			/users/{user_id} [get]
 func (h *UserHandler) GetUserByID(c echo.Context) error {
 	ctx := c.Request().Context()
 	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+		return c.JSON(httpErrors.ErrorResponse(err))
 	}
 
 	user, err := h.usecase.GetUserByID(ctx, int64(id))
 
 	if err != nil {
-		status, apiErr := httpErrors.ParseErrors(err)
-
-		return c.JSON(status, apiErr)
+		return c.JSON(httpErrors.ErrorResponse(err))
 	}
 
 	return c.JSON(http.StatusOK, user)
@@ -78,31 +77,27 @@ func (h *UserHandler) GetUserByID(c echo.Context) error {
 //	@Produce		json
 //	@Param			request	body		domain.LoginRequest	true	"Login data: email and password"
 //	@Success		200		{object}	domain.TokenResponse
-//	@Router			/user/login [post]
+//  @Failure		400   {object}  domain.RestError
+//  @Failure		404   {object}  domain.RestError
+//  @Failure		500   {object}  domain.RestError
+//	@Router			/users/login [post]
 func (h *UserHandler) LoginUser(c echo.Context) error {
 	ctx := c.Request().Context()
 	var user domain.LoginRequest
-
 	c.Bind(&user)
 
-	u, err := h.usecase.GetUser(ctx, &user)
-
-	if err != nil {
-		status, apiErr := httpErrors.ParseErrors(err)
-
-		return c.JSON(status, apiErr)
+	// Validate body request
+	if err := v.ValidateStruct(user); err != nil {
+		return c.JSON(httpErrors.ErrorResponse(err))
 	}
 
-	token, err := jwtToken.GenerateJWT(u.Email, u.IsStaff)
+	loggedUser, err := h.usecase.LoginUser(ctx, &user)
 
 	if err != nil {
-		return c.NoContent(http.StatusInternalServerError)
+		return c.JSON(httpErrors.ErrorResponse(err))
 	}
 
-	return c.JSON(http.StatusOK, domain.TokenResponse{
-		Message: "Login succesful",
-		Token:   token,
-	})
+	return c.JSON(http.StatusOK, loggedUser)
 }
 
 //	@Summary		Delete current user
@@ -113,23 +108,23 @@ func (h *UserHandler) LoginUser(c echo.Context) error {
 //	@Param			user_id			path	string	true	"User ID"
 //	@Param			Authorization	header	string	true	"With the bearer started."
 //	@Success		204
-//	@Router			/user/{user_id} [delete]
-func (u *UserHandler) DeleteUser(c echo.Context) error {
-	ctx := c.Request().Context()
-	email := c.Get("email").(string)
+//	@Router			/users/{user_id} [delete]
+// func (u *UserHandler) DeleteUser(c echo.Context) error {
+// 	ctx := c.Request().Context()
+// 	email := c.Get("email").(string)
 
-	var user domain.UnregisterRequest
+// 	var user domain.UnregisterRequest
 
-	c.Bind(&user)
-	user.Email = email
+// 	c.Bind(&user)
+// 	user.Email = email
 
-	err := u.usecase.DeleteUser(ctx, &user)
+// 	err := u.usecase.DeleteUser(ctx, &user)
 
-	if err != nil {
-		status, apiErr := httpErrors.ParseErrors(err)
+// 	if err != nil {
+// 		status, apiErr := httpErrors.ParseErrors(err)
 
-		return c.JSON(status, apiErr)
-	}
+// 		return c.JSON(status, apiErr)
+// 	}
 
-	return c.NoContent(http.StatusNoContent)
-}
+// 	return c.NoContent(http.StatusNoContent)
+// }
