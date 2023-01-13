@@ -1,13 +1,3 @@
-<div align="center">
-
-<h1>🚀 Bookery API</h1>
-
-![GitHub stars](https://img.shields.io/github/stars/techwithmat/bookery-api)
-![GitHub issues](https://img.shields.io/github/issues/techwithmat/bookery-api)
-![GitHub license](https://img.shields.io/github/license/techwithmat/bookery-api)
-
-</div>
-
 ## 📦 Packages
 
 - **[Echo](https://github.com/labstack/echo)** - Web framework
