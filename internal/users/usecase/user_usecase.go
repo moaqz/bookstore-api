@@ -34,13 +34,13 @@ func (u *userUseCase) RegisterUser(ctx context.Context, user *domain.SignUpReque
 	// change the password for the hashed password
 	user.Password = hashedPassword
 
-	err = u.userRepo.RegisterUser(ctx, user)
+	err = u.userRepo.Insert(ctx, user)
 
 	return err
 }
 
 func (u *userUseCase) GetUserByID(ctx context.Context, id int64) (*domain.GetUserResponse, error) {
-	user, err := u.userRepo.GetUserByID(ctx, id)
+	user, err := u.userRepo.FindById(ctx, id)
 
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func (u *userUseCase) GetUser(ctx context.Context, user *domain.LoginRequest) (*
 		return nil, validationErrors
 	}
 
-	existingUser, err := u.userRepo.GetUser(ctx, user.Email)
+	existingUser, err := u.userRepo.FindByEmail(ctx, user.Email)
 
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (u *userUseCase) DeleteUser(ctx context.Context, user *domain.UnregisterReq
 		return validationErrors
 	}
 
-	existingUser, err := u.userRepo.GetUser(ctx, user.Email)
+	existingUser, err := u.userRepo.FindByEmail(ctx, user.Email)
 
 	if err != nil {
 		return err
@@ -87,7 +87,7 @@ func (u *userUseCase) DeleteUser(ctx context.Context, user *domain.UnregisterReq
 		return err
 	}
 
-	err = u.userRepo.DeleteUser(ctx, user.Email)
+	err = u.userRepo.Delete(ctx, user.Email)
 
 	return err
 }

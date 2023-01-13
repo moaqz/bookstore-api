@@ -49,8 +49,8 @@ type UserUseCase interface {
 
 // UserRepository represent the User's repository contract
 type UserRepository interface {
-	GetUserByID(ctx context.Context, id int64) (*GetUserResponse, error)
-	RegisterUser(ctx context.Context, user *SignUpRequest) error
-	GetUser(ctx context.Context, email string) (*User, error)
-	DeleteUser(ctx context.Context, email string) error
+	Insert(ctx context.Context, user *SignUpRequest) error
+	FindById(ctx context.Context, id int64) (*GetUserResponse, error)
+	FindByEmail(ctx context.Context, email string) (*User, error)
+	Delete(ctx context.Context, email string) error
 }

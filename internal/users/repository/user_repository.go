@@ -17,16 +17,16 @@ func NewUsersRepo(db *sqlx.DB) domain.UserRepository {
 	}
 }
 
-func (r *usersRepo) RegisterUser(ctx context.Context, user *domain.SignUpRequest) error {
-	_, err := r.db.ExecContext(ctx, registerUser, user.Email, user.Password, false)
+func (r *usersRepo) Insert(ctx context.Context, user *domain.SignUpRequest) error {
+	_, err := r.db.ExecContext(ctx, InsertUserQuery, user.Email, user.Password, false)
 
 	return err
 }
 
-func (r *usersRepo) GetUserByID(ctx context.Context, id int64) (*domain.GetUserResponse, error) {
+func (r *usersRepo) FindById(ctx context.Context, id int64) (*domain.GetUserResponse, error) {
 	var user domain.GetUserResponse
 
-	err := r.db.GetContext(ctx, &user, getUserById, id)
+	err := r.db.GetContext(ctx, &user, FindUserByIdQuery, id)
 
 	if err != nil {
 		return nil, err
@@ -37,10 +37,10 @@ func (r *usersRepo) GetUserByID(ctx context.Context, id int64) (*domain.GetUserR
 	return &user, err
 }
 
-func (r *usersRepo) GetUser(ctx context.Context, email string) (*domain.User, error) {
+func (r *usersRepo) FindByEmail(ctx context.Context, email string) (*domain.User, error) {
 	var user domain.User
 
-	err := r.db.GetContext(ctx, &user, getUser, email)
+	err := r.db.GetContext(ctx, &user, FindOneUserQuery, email)
 
 	if err != nil {
 		return nil, err
@@ -49,8 +49,8 @@ func (r *usersRepo) GetUser(ctx context.Context, email string) (*domain.User, er
 	return &user, nil
 }
 
-func (r *usersRepo) DeleteUser(ctx context.Context, email string) error {
-	_, err := r.db.ExecContext(ctx, deleteUser, email)
+func (r *usersRepo) Delete(ctx context.Context, email string) error {
+	_, err := r.db.ExecContext(ctx, DeleteUserQuery, email)
 
 	if err != nil {
 		return err

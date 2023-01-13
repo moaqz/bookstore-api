@@ -1,14 +1,14 @@
 package repository
 
 const (
-	registerUser = `
+	InsertUserQuery = `
 	INSERT INTO
     users (email, password, is_staff)
 	VALUES
     ($1, $2, $3);
 	`
 
-	getUserById = `
+	FindUserByIdQuery = `
 	SELECT 
 		email, 
 		is_staff 
@@ -18,7 +18,7 @@ const (
 		id = $1;
 	`
 
-	getUser = `
+	FindOneUserQuery = `
 	SELECT 
 		id,
 		email,
@@ -30,7 +30,7 @@ const (
 		email = $1;
 	`
 
-	deleteUser = `
+	DeleteUserQuery = `
 	DELETE FROM 
 		users
 	WHERE
