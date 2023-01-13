@@ -485,7 +485,7 @@ paths:
       summary: Update a category
       tags:
       - categories
-  /user/{user_id}:
+  /users/{user_id}:
     delete:
       consumes:
       - application/json
@@ -495,7 +495,7 @@ paths:
         in: path
         name: user_id
         required: true
-        type: string
+        type: integer
       - description: With the bearer started.
         in: header
         name: Authorization
@@ -506,19 +506,35 @@ paths:
       responses:
         "204":
           description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
       summary: Delete current user
       tags:
       - users
     get:
       consumes:
       - application/json
-      description: Get id, username, email, first name, last name and bio from a user
+      description: Get id, email and role from a user
       parameters:
       - description: User ID
         in: path
         name: user_id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -526,10 +542,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.GetUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
       summary: Get an user account data
       tags:
       - users
-  /user/login:
+  /users/login:
     post:
       consumes:
       - application/json
@@ -549,10 +577,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
       summary: Login a user
       tags:
       - users
-  /user/signup:
+  /users/signup:
     post:
       consumes:
       - application/json
@@ -571,6 +611,18 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/domain.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpErrors.RestError'
       summary: Register a new user
       tags:
       - users

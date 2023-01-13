@@ -566,7 +566,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/login": {
+        "/users/login": {
             "post": {
                 "description": "Login a user using email and password receive a JWT as a response from a successful login",
                 "consumes": [
@@ -596,11 +596,29 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.TokenResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
                     }
                 }
             }
         },
-        "/user/signup": {
+        "/users/signup": {
             "post": {
                 "description": "Register a user using email, username, password and password confirmation",
                 "consumes": [
@@ -630,13 +648,31 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.TokenResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
                     }
                 }
             }
         },
-        "/user/{user_id}": {
+        "/users/{user_id}": {
             "get": {
-                "description": "Get id, username, email, first name, last name and bio from a user",
+                "description": "Get id, email and role from a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -649,7 +685,7 @@ const docTemplate = `{
                 "summary": "Get an user account data",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "User ID",
                         "name": "user_id",
                         "in": "path",
@@ -661,6 +697,24 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domain.GetUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
                         }
                     }
                 }
@@ -679,7 +733,7 @@ const docTemplate = `{
                 "summary": "Delete current user",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "User ID",
                         "name": "user_id",
                         "in": "path",
@@ -696,6 +750,30 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpErrors.RestError"
+                        }
                     }
                 }
             }
