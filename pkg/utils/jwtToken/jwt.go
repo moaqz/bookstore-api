@@ -9,16 +9,16 @@ import (
 )
 
 type jwtCustomClaims struct {
-	Email   string `json:"email"`
-	IsStaff bool   `json:"is_staff"`
+	ID      int64 `json:"id"`
+	IsStaff bool  `json:"is_staff"`
 	jwt.RegisteredClaims
 }
 
-func GenerateJWT(email string, isStaff bool) (string, error) {
+func GenerateJWT(id int64, isStaff bool) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 
 	claims := jwtCustomClaims{
-		Email:   email,
+		ID:      id,
 		IsStaff: isStaff,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
