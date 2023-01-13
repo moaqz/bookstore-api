@@ -5,7 +5,8 @@ const (
 	INSERT INTO
     users (email, password, is_staff)
 	VALUES
-    ($1, $2, $3);
+    ($1, $2, $3)
+	RETURNING id
 	`
 
 	FindUserByIdQuery = `
@@ -18,7 +19,7 @@ const (
 		id = $1;
 	`
 
-	FindOneUserQuery = `
+	FindByEmailUserQuery = `
 	SELECT 
 		id,
 		email,
@@ -34,6 +35,6 @@ const (
 	DELETE FROM 
 		users
 	WHERE
-		email = $1;
+		id = $1;
 	`
 )
