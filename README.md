@@ -19,21 +19,54 @@
 - **[Testify](https://github.com/stretchr/testify)** - Testing toolkit
 - **[Docker](https://www.docker.com/)** - Docker
 
-## 📝 Description
+## 📝 Data Flow
 
-This project has 4 layers:
+![DataFlow](./data_flow.png)
 
-- Domain Layer
-- Repository Layer
-- Usecase Layer
-- Delivery Layer
+## 🔧 Getting Started
 
-The diagram:
+> 🚧 You will need [Go](https://go.dev/doc/install), [Docker](https://www.docker.com/get-started/) and [Migrate](https://github.com/golang-migrate/migrate) installed.
 
-![Diagram](./clean-arch.png)
+1. Clone the repository
 
-The original explanation about this project's structure can be found [here](https://medium.easyread.co/golang-clean-architecture-efd6d7c43047). The structure of this project is inspired by that article.
+```bash
+git clone git@github.com:techwithmat/bookery-api.git
+```
 
+2. Go to the directory
+
+```bash
+cd bookery-api
+```
+
+3. Create a **.env** file with the following content:
+
+```bash
+# Database Config.
+POSTGRES_HOST=
+POSTGRES_PORT=
+POSTGRES_USER=
+POSTGRES_DB=
+POSTGRES_PASSWORD=
+
+# Port number that the server will be listening to.
+PORT=
+
+# Secret key that will be used to sign the JWT tokens.
+JWT_SECRET=
+```
+
+4. Once you got those things in place just run the following command.
+
+```bash
+# Start docker compose and the server
+make docker-up run
+
+# Run migrations
+migrate -path ./migrations -database postgres://<db_user>:<db_user_password>@<host>/<database_name>?sslmode=disable up
+## or 
+migrate -path ./migrations -database postgres://<db_user>:<db_user_password>@<host>/<database_name>?sslmode=disable down
+```
 
 ## 🔑 License:
 
