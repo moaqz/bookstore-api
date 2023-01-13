@@ -34,23 +34,18 @@ type GetUserResponse struct {
 	IsStaff bool   `json:"is_staff" db:"is_staff"`
 }
 
-type UnregisterRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password" form:"password" validate:"required,min=8,max=28"`
-}
-
 // UserUsecase represent the User's usecases
 type UserUseCase interface {
 	GetUserByID(ctx context.Context, id int64) (*GetUserResponse, error)
-	RegisterUser(ctx context.Context, user *SignUpRequest) error
-	GetUser(ctx context.Context, user *LoginRequest) (*User, error)
-	DeleteUser(ctx context.Context, user *UnregisterRequest) error
+	RegisterUser(ctx context.Context, user *SignUpRequest) (*TokenResponse, error)
+	LoginUser(ctx context.Context, user *LoginRequest) (*TokenResponse, error)
+	DeleteUser(ctx context.Context, userId int64) error
 }
 
 // UserRepository represent the User's repository contract
 type UserRepository interface {
-	Insert(ctx context.Context, user *SignUpRequest) error
+	Insert(ctx context.Context, user *SignUpRequest) (int64, error)
 	FindById(ctx context.Context, id int64) (*GetUserResponse, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
-	Delete(ctx context.Context, email string) error
+	Delete(ctx context.Context, userId int64) error
 }
