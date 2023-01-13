@@ -65,6 +65,8 @@ func Parse(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, ErrValidation.Error(), v.ValidatorErrors(err))
 	case strings.Contains(err.Error(), "foreign key constraint"):
 		return NewRestError(http.StatusConflict, ErrConflict.Error(), err.Error())
+	case strings.Contains(err.Error(), "key value violates unique constraint"):
+		return NewRestError(http.StatusConflict, ErrEmailAlreadyExists.Error(), err.Error())
 	default:
 		return NewRestError(http.StatusInternalServerError, ErrInternalServerError.Error(), nil)
 	}

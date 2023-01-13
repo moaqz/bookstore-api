@@ -11,6 +11,7 @@ var (
 	ErrConflict            = errors.New("A Conflict ocurred")
 	ErrUnauthorized        = errors.New("Unauthorized")
 	ErrForbidden           = errors.New("Forbidden")
+	ErrEmailAlreadyExists  = errors.New("User with given email already exists")
 )
 
 type RestErr interface {
