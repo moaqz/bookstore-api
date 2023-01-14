@@ -5,7 +5,6 @@ import (
 
 	"github.com/techwithmat/bookery-api/internal/domain"
 	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
-	"github.com/techwithmat/bookery-api/pkg/utils/validation"
 )
 
 // Book UseCase
@@ -50,12 +49,6 @@ func (u *bookUsecase) GetAll(ctx context.Context, p *pagination.PaginationQuery)
 }
 
 func (u *bookUsecase) InsertBook(ctx context.Context, book *domain.Book) (int64, error) {
-	validationErrors := validation.ValidateStruct(book)
-
-	if validationErrors != nil {
-		return 0, validationErrors
-	}
-
 	id, err := u.bookRepo.InsertBook(ctx, book)
 
 	return id, err
@@ -71,8 +64,4 @@ func (u *bookUsecase) DeleteBook(ctx context.Context, id int64) error {
 	err = u.bookRepo.DeleteBook(ctx, id)
 
 	return err
-}
-
-func (u *bookUsecase) UpdateBook(ctx context.Context, book *domain.Book) error {
-	return nil
 }

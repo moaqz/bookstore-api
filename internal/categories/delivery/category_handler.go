@@ -8,20 +8,21 @@ import (
 	"github.com/techwithmat/bookery-api/internal/domain"
 	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
 	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
+	"github.com/techwithmat/bookery-api/pkg/utils/validation"
 )
 
-//	@Summary		Get a list of categories
-//	@Description	Get a list of categories. Use page and size GET arguments to regulate the number of objects returned and the page, respectively.
-//	@Tags			categories
-//	@Accept			json
-//	@Produce		json
-//	@Param			page	query		int	false	"Page number"
-//	@Param			size	query		int	false	"Size number"
-//	@Success		200		{array}		domain.Category
-//	@Failure		400		{object}	httpErrors.RestError
-//	@Failure		404		{object}	httpErrors.EmptyBody
-//	@Failure		500		{object}	httpErrors.RestError
-//	@Router			/categories [get]
+// @Summary		Get a list of categories
+// @Description	Get a list of categories. Use page and size GET arguments to regulate the number of objects returned and the page, respectively.
+// @Tags			categories
+// @Accept			json
+// @Produce		json
+// @Param			page	query		int	false	"Page number"
+// @Param			size	query		int	false	"Size number"
+// @Success		200		{array}		domain.Category
+// @Failure		400		{object}	httpErrors.RestError
+// @Failure		404		{object}	httpErrors.EmptyBody
+// @Failure		500		{object}	httpErrors.RestError
+// @Router			/categories [get]
 func (h *CategoryHandler) GetCategories(c echo.Context) error {
 	ctx := c.Request().Context()
 	params, err := pagination.GetPagination(c)
@@ -43,17 +44,17 @@ func (h *CategoryHandler) GetCategories(c echo.Context) error {
 	return c.JSON(http.StatusOK, categories)
 }
 
-//	@Summary		Get a category by its id
-//	@Description	Get a specific category object. Id parameter must be an integer.
-//	@Tags			categories
-//	@Accept			json
-//	@Produce		json
-//	@Param			category_id	path		int	true	"Category ID"
-//	@Success		200			{array}		domain.Category
-//	@Failure		400			{object}	httpErrors.RestError
-//	@Failure		404			{object}	httpErrors.RestError
-//	@Failure		500			{object}	httpErrors.RestError
-//	@Router			/categories/{category_id} [get]
+// @Summary		Get a category by its id
+// @Description	Get a specific category object. Id parameter must be an integer.
+// @Tags			categories
+// @Accept			json
+// @Produce		json
+// @Param			category_id	path		int	true	"Category ID"
+// @Success		200			{array}		domain.Category
+// @Failure		400			{object}	httpErrors.RestError
+// @Failure		404			{object}	httpErrors.RestError
+// @Failure		500			{object}	httpErrors.RestError
+// @Router			/categories/{category_id} [get]
 func (h *CategoryHandler) GetCategoryById(c echo.Context) error {
 	ctx := c.Request().Context()
 	id, err := strconv.Atoi(c.Param("id"))
@@ -71,21 +72,26 @@ func (h *CategoryHandler) GetCategoryById(c echo.Context) error {
 	return c.JSON(http.StatusOK, category)
 }
 
-//	@Summary		Create a new category
-//	@Description	Create a new category object.
-//	@Tags			categories
-//	@Accept			json
-//	@Produce		json
-//	@Param			request			body		domain.Category	true	"New Category data"
-//	@Param			Authorization	header		string			true	"With the bearer started. Only staff members"
-//	@Success		201				{object}	domain.Category
-//	@Failure		400				{object}	httpErrors.RestError
-//	@Failure		500				{object}	httpErrors.RestError
-//	@Router			/categories [post]
+// @Summary		Create a new category
+// @Description	Create a new category object.
+// @Tags			categories
+// @Accept			json
+// @Produce		json
+// @Param			request			body		domain.Category	true	"New Category data"
+// @Param			Authorization	header		string			true	"With the bearer started. Only staff members"
+// @Success		201				{object}	domain.Category
+// @Failure		400				{object}	httpErrors.RestError
+// @Failure		500				{object}	httpErrors.RestError
+// @Router			/categories [post]
 func (h *CategoryHandler) CreateCategory(c echo.Context) error {
 	ctx := c.Request().Context()
 	var category domain.Category
 	c.Bind(&category)
+
+	err := validation.ValidateStruct(category)
+	if err != nil {
+		return c.JSON(httpErrors.ErrorResponse(err))
+	}
 
 	id, err := h.usecase.InsertCategory(ctx, &category)
 
@@ -98,24 +104,34 @@ func (h *CategoryHandler) CreateCategory(c echo.Context) error {
 	return c.JSON(http.StatusCreated, category)
 }
 
-//	@Summary		Update a category
-//	@Description	Update a category object by its Id.
-//	@Tags			categories
-//	@Accept			json
-//	@Produce		json
-//	@Param			request			body		domain.Category	true	"Updated Category data"
-//	@Param			Authorization	header		string			true	"With the bearer started. Only staff members"
-//	@Param			category_id		path		int				true	"Category ID"
-//	@Success		200				{object}	domain.Category
-//	@Failure		400				{object}	httpErrors.RestError
-//	@Failure		404				{object}	httpErrors.RestError
-//	@Failure		500				{object}	httpErrors.RestError
-//	@Router			/categories/{category_id} [patch]
+// @Summary		Update a category
+// @Description	Update a category object by its Id.
+// @Tags			categories
+// @Accept			json
+// @Produce		json
+// @Param			request			body		domain.Category	true	"Updated Category data"
+// @Param			Authorization	header		string			true	"With the bearer started. Only staff members"
+// @Param			category_id		path		int				true	"Category ID"
+// @Success		200				{object}	domain.Category
+// @Failure		400				{object}	httpErrors.RestError
+// @Failure		404				{object}	httpErrors.RestError
+// @Failure		500				{object}	httpErrors.RestError
+// @Router			/categories/{category_id} [patch]
 func (h *CategoryHandler) UpdateCategory(c echo.Context) error {
 	ctx := c.Request().Context()
 	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		return c.JSON(httpErrors.ErrorResponse(err))
+	}
+
 	var category domain.Category
 	c.Bind(&category)
+
+	err = validation.ValidateStruct(category)
+	if err != nil {
+		return c.JSON(httpErrors.ErrorResponse(err))
+	}
 
 	if err != nil {
 		return c.JSON(httpErrors.ErrorResponse(err))
@@ -131,18 +147,18 @@ func (h *CategoryHandler) UpdateCategory(c echo.Context) error {
 	return c.JSON(http.StatusOK, category)
 }
 
-//	@Summary		Delete a category
-//	@Description	Delete a category object.
-//	@Tags			categories
-//	@Accept			json
-//	@Produce		json
-//	@Param			category_id		path	int		true	"Category ID"
-//	@Param			Authorization	header	string	true	"With the bearer started. Only staff members"
-//	@Success		204
-//	@Failure		404	{object}	httpErrors.RestError
-//	@Failure		409	{object}	httpErrors.RestError
-//	@Failure		500	{object}	httpErrors.RestError
-//	@Router			/categories/{category_id} [delete]
+// @Summary		Delete a category
+// @Description	Delete a category object.
+// @Tags			categories
+// @Accept			json
+// @Produce		json
+// @Param			category_id		path	int		true	"Category ID"
+// @Param			Authorization	header	string	true	"With the bearer started. Only staff members"
+// @Success		204
+// @Failure		404	{object}	httpErrors.RestError
+// @Failure		409	{object}	httpErrors.RestError
+// @Failure		500	{object}	httpErrors.RestError
+// @Router			/categories/{category_id} [delete]
 func (h *CategoryHandler) DeleteCategory(c echo.Context) error {
 	ctx := c.Request().Context()
 	id, err := strconv.Atoi(c.Param("id"))

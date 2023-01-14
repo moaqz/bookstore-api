@@ -8,6 +8,7 @@ import (
 	"github.com/techwithmat/bookery-api/internal/domain"
 	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
 	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
+	"github.com/techwithmat/bookery-api/pkg/utils/validation"
 )
 
 //	@Summary		Get a list of books
@@ -122,8 +123,12 @@ func (h *BookHandler) CreateBook(c echo.Context) error {
 	var book domain.Book
 	c.Bind(&book)
 
-	id, err := h.usecase.InsertBook(ctx, &book)
+	err := validation.ValidateStruct(book)
+	if err != nil {
+		return c.JSON(httpErrors.ErrorResponse(err))
+	}
 
+	id, err := h.usecase.InsertBook(ctx, &book)
 	if err != nil {
 		return c.JSON(httpErrors.ErrorResponse(err))
 	}
