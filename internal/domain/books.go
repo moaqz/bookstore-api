@@ -3,7 +3,7 @@ package domain
 import (
 	"context"
 
-	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
+	"github.com/techwithmat/bookstore-api/pkg/utils/pagination"
 )
 
 // Book is representing the Book data struct

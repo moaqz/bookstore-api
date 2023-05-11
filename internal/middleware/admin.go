@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
+	"github.com/techwithmat/bookstore-api/pkg/utils/httpErrors"
 )
 
 func AdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {

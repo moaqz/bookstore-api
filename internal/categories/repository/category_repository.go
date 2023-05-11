@@ -5,8 +5,8 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/techwithmat/bookery-api/internal/domain"
-	p "github.com/techwithmat/bookery-api/pkg/utils/pagination"
+	"github.com/techwithmat/bookstore-api/internal/domain"
+	p "github.com/techwithmat/bookstore-api/pkg/utils/pagination"
 )
 
 type CategoryRepo struct {
@@ -83,7 +83,7 @@ func (r *CategoryRepo) UpdateCategory(ctx context.Context, c *domain.Category) e
 	}
 
 	count, err := res.RowsAffected()
-	
+
 	if err != nil {
 		return err
 	}

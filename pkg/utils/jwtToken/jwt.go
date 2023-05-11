@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/techwithmat/bookery-api/pkg/utils/env"
+	"github.com/techwithmat/bookstore-api/pkg/utils/env"
 )
 
 type jwtCustomClaims struct {

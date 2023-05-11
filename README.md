@@ -6,7 +6,6 @@
 - **[Jwt-go](https://github.com/dgrijalva/jwt-go)** - JSON Web Tokens (JWT)
 - **[Migrate](https://github.com/golang-migrate/migrate)** - Database migrations. CLI and Golang library.
 - **[Swag](https://github.com/swaggo/swag)** - Swagger
-- **[Testify](https://github.com/stretchr/testify)** - Testing toolkit
 - **[Docker](https://www.docker.com/)** - Docker
 
 ## 📝 Data Flow
@@ -20,13 +19,13 @@
 1. Clone the repository
 
 ```bash
-git clone git@github.com:techwithmat/bookery-api.git
+git clone git@github.com:techwithmat/bookstore-api.git
 ```
 
 2. Go to the directory
 
 ```bash
-cd bookery-api
+cd bookstore-api
 ```
 
 3. Create a **.env** file with the following content:
@@ -54,10 +53,10 @@ make docker-up run
 
 # Run migrations
 migrate -path ./migrations -database postgres://<db_user>:<db_user_password>@<host>/<database_name>?sslmode=disable up
-## or 
+## or
 migrate -path ./migrations -database postgres://<db_user>:<db_user_password>@<host>/<database_name>?sslmode=disable down
 ```
 
 ## 🔑 License:
 
-- [MIT License](https://github.com/techwithmat/bookery-api/blob/main/LICENSE).
+- [MIT License](https://github.com/techwithmat/bookstore-api/blob/main/LICENSE).

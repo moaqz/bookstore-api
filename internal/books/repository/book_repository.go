@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/techwithmat/bookery-api/internal/domain"
-	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
+	"github.com/techwithmat/bookstore-api/internal/domain"
+	"github.com/techwithmat/bookstore-api/pkg/utils/pagination"
 )
 
 type BooksRepo struct {

@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
-	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
-	"github.com/techwithmat/bookery-api/pkg/utils/jwtToken"
+	"github.com/techwithmat/bookstore-api/pkg/utils/httpErrors"
+	"github.com/techwithmat/bookstore-api/pkg/utils/jwtToken"
 )
 
 func AuthJWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {

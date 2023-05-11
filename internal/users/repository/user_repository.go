@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/techwithmat/bookery-api/internal/domain"
+	"github.com/techwithmat/bookstore-api/internal/domain"
 )
 
 type usersRepo struct {

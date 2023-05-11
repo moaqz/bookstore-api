@@ -3,7 +3,7 @@ package domain
 import (
 	"context"
 
-	p "github.com/techwithmat/bookery-api/pkg/utils/pagination"
+	p "github.com/techwithmat/bookstore-api/pkg/utils/pagination"
 )
 
 type Category struct {

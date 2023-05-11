@@ -2,8 +2,8 @@ package delivery
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/techwithmat/bookery-api/internal/domain"
-	"github.com/techwithmat/bookery-api/internal/middleware"
+	"github.com/techwithmat/bookstore-api/internal/domain"
+	"github.com/techwithmat/bookstore-api/internal/middleware"
 )
 
 type BookHandler struct {

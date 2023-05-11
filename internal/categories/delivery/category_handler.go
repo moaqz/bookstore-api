@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
-	"github.com/techwithmat/bookery-api/internal/domain"
-	"github.com/techwithmat/bookery-api/pkg/utils/httpErrors"
-	"github.com/techwithmat/bookery-api/pkg/utils/pagination"
-	"github.com/techwithmat/bookery-api/pkg/utils/validation"
+	"github.com/techwithmat/bookstore-api/internal/domain"
+	"github.com/techwithmat/bookstore-api/pkg/utils/httpErrors"
+	"github.com/techwithmat/bookstore-api/pkg/utils/pagination"
+	"github.com/techwithmat/bookstore-api/pkg/utils/validation"
 )
 
 // @Summary		Get a list of categories

@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	v "github.com/techwithmat/bookery-api/pkg/utils/validation"
+	v "github.com/techwithmat/bookstore-api/pkg/utils/validation"
 )
 
 func (e RestError) Error() string {

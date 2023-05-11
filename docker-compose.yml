@@ -1,10 +1,10 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  bookery-db:
+  bookstore-db:
     image: postgres:15
     restart: always
-    container_name: bookery-db
+    container_name: bookstore-db
     ports:
       # - "127.0.0.1:5432:5432"
       - "5432:5432"
@@ -13,7 +13,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - bookery-db:/var/lib/postgresql/data
+      - bookstore-db:/var/lib/postgresql/data
 
 volumes:
-  bookery-db:
+  bookstore-db:

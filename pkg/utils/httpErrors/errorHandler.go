@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	v "github.com/techwithmat/bookery-api/pkg/utils/validation"
+	v "github.com/techwithmat/bookstore-api/pkg/utils/validation"
 )
 
 type ApiError struct {

@@ -1,4 +1,4 @@
-module github.com/techwithmat/bookery-api
+module github.com/techwithmat/bookstore-api
 
 go 1.19
 

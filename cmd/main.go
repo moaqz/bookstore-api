@@ -5,27 +5,27 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/techwithmat/bookery-api/config"
-	"github.com/techwithmat/bookery-api/pkg/database"
+	"github.com/techwithmat/bookstore-api/config"
+	"github.com/techwithmat/bookstore-api/pkg/database"
 
 	// Book Imports
-	bookDelivery "github.com/techwithmat/bookery-api/internal/books/delivery"
-	bookRepository "github.com/techwithmat/bookery-api/internal/books/repository"
-	bookUseCase "github.com/techwithmat/bookery-api/internal/books/usecase"
+	bookDelivery "github.com/techwithmat/bookstore-api/internal/books/delivery"
+	bookRepository "github.com/techwithmat/bookstore-api/internal/books/repository"
+	bookUseCase "github.com/techwithmat/bookstore-api/internal/books/usecase"
 
 	// User Imports
-	userDelivery "github.com/techwithmat/bookery-api/internal/users/delivery"
-	userRepository "github.com/techwithmat/bookery-api/internal/users/repository"
-	userUseCase "github.com/techwithmat/bookery-api/internal/users/usecase"
+	userDelivery "github.com/techwithmat/bookstore-api/internal/users/delivery"
+	userRepository "github.com/techwithmat/bookstore-api/internal/users/repository"
+	userUseCase "github.com/techwithmat/bookstore-api/internal/users/usecase"
 
 	// Category Imports
-	categoryDelivery "github.com/techwithmat/bookery-api/internal/categories/delivery"
-	categoryRepository "github.com/techwithmat/bookery-api/internal/categories/repository"
-	categoryUseCase "github.com/techwithmat/bookery-api/internal/categories/usecase"
+	categoryDelivery "github.com/techwithmat/bookstore-api/internal/categories/delivery"
+	categoryRepository "github.com/techwithmat/bookstore-api/internal/categories/repository"
+	categoryUseCase "github.com/techwithmat/bookstore-api/internal/categories/usecase"
 
 	// Swagger
-	"github.com/swaggo/echo-swagger"
-	_ "github.com/techwithmat/bookery-api/docs"
+	echoSwagger "github.com/swaggo/echo-swagger"
+	_ "github.com/techwithmat/bookstore-api/docs"
 )
 
 //	@title			Book Store API
@@ -36,8 +36,8 @@ import (
 //	@license.name	MIT
 //	@license.url	https://mit-license.org/
 
-//	@host		localhost:3009
-//	@BasePath	/api/v1
+// @host		localhost:3009
+// @BasePath	/api/v1
 func main() {
 	// get configuration stucts
 	configuration, err := config.NewConfig()

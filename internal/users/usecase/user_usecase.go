@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
-	"github.com/techwithmat/bookery-api/internal/domain"
-	"github.com/techwithmat/bookery-api/pkg/utils/hash"
-	"github.com/techwithmat/bookery-api/pkg/utils/jwtToken"
+	"github.com/techwithmat/bookstore-api/internal/domain"
+	"github.com/techwithmat/bookstore-api/pkg/utils/hash"
+	"github.com/techwithmat/bookstore-api/pkg/utils/jwtToken"
 )
 
 type userUseCase struct {
@@ -28,7 +28,7 @@ func (u *userUseCase) RegisterUser(ctx context.Context, user *domain.SignUpReque
 	// change the password for the hashed password
 	user.Password = hashedPassword
 
-	// Insert the user to the database 
+	// Insert the user to the database
 	id, err := u.userRepo.Insert(ctx, user)
 	if err != nil {
 		return nil, err
